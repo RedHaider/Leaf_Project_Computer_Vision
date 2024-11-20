@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Real-Time Face Detection</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Basic flex layout for full height with footer stick to bottom */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: url("{{ url_for('static', filename='images/faceDetection.webp') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #333;
+        }
+        .content {
+            flex: 1; /* Makes content container grow and take available space */
+            padding: 20px;
+        }
+        .navbar {
+            background-image: url("{{ url_for('static', filename='images/black.jpg') }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            color: #f8f9fa;
+        }
+        .navbar-brand, .nav-link {
+            color: white;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9rem;
+            color: #6c757d;
+            background-image: url("{{ url_for('static', filename='images/black.jpg') }}");
+        }
+        .footer {
+            color: #f8f9fa;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9rem;
+            background-image: url("{{ url_for('static', filename='images/black.jpg') }}");
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg pr-5 pl-5">
+    <a class="navbar-brand" href="{{ url_for('redirect_to_dashboard') }}">AI Tools</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('redirect_to_dashboard') }}">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('redirect_to_login') }}">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Dashboard Content -->
+<div class="content container mt-5 mb-5">
+    <!-- Filter Section -->
+    <!-- Filter Section -->
+    <div class="row mb-4">
+        <div class="col-md-2">
+            <input type="text" id="filter-employee-id" class="form-control" placeholder="Employee ID">
+        </div>
+        <div class="col-md-3">
+            <input type="text" id="filter-employee-name" class="form-control" placeholder="Employee Name">
+        </div>
+        <div class="col-md-3">
+            <input type="text" id="filter-department" class="form-control" placeholder="Department">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="filter-time-in" class="form-control" placeholder="Time In">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="filter-time-out" class="form-control" placeholder="Time Out">
+        </div>
+    </div>
+
+    <!-- Attendance Table -->
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Department</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+            </tr>
+        </thead>
+        <tbody id="attendance-table">
+            <tr><td>EMP001</td><td>Employee 1</td><td>IT</td><td>10:26 AM</td><td>04:00 PM</td></tr>
+            <tr><td>EMP002</td><td>Employee 2</td><td>Finance</td><td>09:34 AM</td><td>06:38 PM</td></tr>
+            <tr><td>EMP003</td><td>Employee 3</td><td>HR</td><td>09:51 AM</td><td>05:58 PM</td></tr>
+            <tr><td>EMP004</td><td>Employee 4</td><td>IT</td><td>10:01 AM</td><td>05:12 PM</td></tr>
+            <tr><td>EMP005</td><td>Employee 5</td><td>Operations</td><td>10:49 AM</td><td>05:28 PM</td></tr>
+            <tr><td>EMP006</td><td>Employee 6</td><td>Operations</td><td>07:40 AM</td><td>05:11 PM</td></tr>
+            <tr><td>EMP007</td><td>Employee 7</td><td>HR</td><td>08:49 AM</td><td>04:55 PM</td></tr>
+            <tr><td>EMP008</td><td>Employee 8</td><td>Marketing</td><td>09:09 AM</td><td>04:45 PM</td></tr>
+            <tr><td>EMP009</td><td>Employee 9</td><td>Operations</td><td>08:13 AM</td><td>05:41 PM</td></tr>
+            <tr><td>EMP010</td><td>Employee 10</td><td>Finance</td><td>09:36 AM</td><td>04:02 PM</td></tr>
+            <tr><td>EMP011</td><td>Employee 11</td><td>Marketing</td><td>07:48 AM</td><td>06:52 PM</td></tr>
+            <tr><td>EMP012</td><td>Employee 12</td><td>Marketing</td><td>09:17 AM</td><td>05:43 PM</td></tr>
+            <tr><td>EMP013</td><td>Employee 13</td><td>Marketing</td><td>08:53 AM</td><td>06:03 PM</td></tr>
+            <tr><td>EMP014</td><td>Employee 14</td><td>Marketing</td><td>07:21 AM</td><td>04:07 PM</td></tr>
+            <tr><td>EMP015</td><td>Employee 15</td><td>HR</td><td>08:06 AM</td><td>04:30 PM</td></tr>
+            <tr><td>EMP016</td><td>Employee 16</td><td>HR</td><td>08:25 AM</td><td>06:19 PM</td></tr>
+            <tr><td>EMP017</td><td>Employee 17</td><td>Finance</td><td>07:12 AM</td><td>06:17 PM</td></tr>
+            <tr><td>EMP018</td><td>Employee 18</td><td>Operations</td><td>08:31 AM</td><td>05:13 PM</td></tr>
+            <tr><td>EMP019</td><td>Employee 19</td><td>Marketing</td><td>09:21 AM</td><td>04:59 PM</td></tr>
+            <tr><td>EMP020</td><td>Employee 20</td><td>HR</td><td>10:03 AM</td><td>05:53 PM</td></tr>
+            <tr><td>EMP021</td><td>Employee 21</td><td>Marketing</td><td>08:31 AM</td><td>06:40 PM</td></tr>
+            <tr><td>EMP022</td><td>Employee 22</td><td>IT</td><td>09:33 AM</td><td>05:14 PM</td></tr>
+            <tr><td>EMP023</td><td>Employee 23</td><td>Operations</td><td>09:43 AM</td><td>05:36 PM</td></tr>
+            <tr><td>EMP024</td><td>Employee 24</td><td>Operations</td><td>09:55 AM</td><td>04:36 PM</td></tr>
+            <tr><td>EMP025</td><td>Employee 25</td><td>HR</td><td>07:33 AM</td><td>04:52 PM</td></tr>
+            <tr><td>EMP026</td><td>Employee 26</td><td>Operations</td><td>07:08 AM</td><td>06:06 PM</td></tr>
+            <tr><td>EMP027</td><td>Employee 27</td><td>Marketing</td><td>10:55 AM</td><td>05:13 PM</td></tr>
+            <tr><td>EMP028</td><td>Employee 28</td><td>Operations</td><td>08:49 AM</td><td>05:00 PM</td></tr>
+            <tr><td>EMP029</td><td>Employee 29</td><td>Operations</td><td>09:22 AM</td><td>04:24 PM</td></tr>
+            <tr><td>EMP030</td><td>Employee 30</td><td>Operations</td><td>09:20 AM</td><td>05:36 PM</td></tr>
+            <tr><td>EMP031</td><td>Employee 31</td><td>Marketing</td><td>08:27 AM</td><td>05:51 PM</td></tr>
+            <tr><td>EMP032</td><td>Employee 32</td><td>HR</td><td>09:14 AM</td><td>06:35 PM</td></tr>
+            <tr><td>EMP033</td><td>Employee 33</td><td>Operations</td><td>07:41 AM</td><td>04:35 PM</td></tr>
+            <tr><td>EMP034</td><td>Employee 34</td><td>HR</td><td>09:38 AM</td><td>04:48 PM</td></tr>
+            <tr><td>EMP035</td><td>Employee 35</td><td>Finance</td><td>09:34 AM</td><td>06:24 PM</td></tr>
+            <tr><td>EMP036</td><td>Employee 36</td><td>Finance</td><td>09:21 AM</td><td>05:46 PM</td></tr>
+            <tr><td>EMP037</td><td>Employee 37</td><td>Finance</td><td>09:44 AM</td><td>04:43 PM</td></tr>
+            <tr><td>EMP038</td><td>Employee 38</td><td>HR</td><td>08:55 AM</td><td>04:00 PM</td></tr>
+            <tr><td>EMP039</td><td>Employee 39</td><td>IT</td><td>07:56 AM</td><td>06:45 PM</td></tr>
+            <tr><td>EMP040</td><td>Employee 40</td><td>Operations</td><td>10:35 AM</td><td>06:12 PM</td></tr>
+            <tr><td>EMP041</td><td>Employee 41</td><td>Finance</td><td>08:38 AM</td><td>05:46 PM</td></tr>
+            <tr><td>EMP042</td><td>Employee 42</td><td>HR</td><td>08:08 AM</td><td>05:52 PM</td></tr>
+            <tr><td>EMP043</td><td>Employee 43</td><td>IT</td><td>10:30 AM</td><td>05:06 PM</td></tr>
+            <tr><td>EMP044</td><td>Employee 44</td><td>Operations</td><td>08:21 AM</td><td>05:26 PM</td></tr>
+            <tr><td>EMP045</td><td>Employee 45</td><td>IT</td><td>07:46 AM</td><td>04:09 PM</td></tr>
+            <tr><td>EMP046</td><td>Employee 46</td><td>Operations</td><td>08:21 AM</td><td>04:50 PM</td></tr>
+            <tr><td>EMP047</td><td>Employee 47</td><td>IT</td><td>09:27 AM</td><td>04:38 PM</td></tr>
+            <tr><td>EMP048</td><td>Employee 48</td><td>HR</td><td>09:42 AM</td><td>04:14 PM</td></tr>
+            <tr><td>EMP049</td><td>Employee 49</td><td>IT</td><td>10:03 AM</td><td>06:06 PM</td></tr>
+            <tr><td>EMP050</td><td>Employee 50</td><td>Finance</td><td>07:46 AM</td><td>06:01 PM</td></tr>
+        </tbody>
+        
+    </table>
+</div>
+
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container p-4">
+        <div class="row">
+            <!-- About Section -->
+            <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                <h5 class="text-uppercase">About MyApp</h5>
+                <p>
+                    MyApp is your go-to solution for real-time face detection, providing seamless and accurate insights powered by advanced AI technology.
+                </p>
+            </div>
+            <!-- Links Section -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-uppercase">Links</h5>
+                <ul class="list-unstyled mb-0">
+                    <li><a href="#!" class="text-white">Home</a></li>
+                    <li><a href="#!" class="text-white">Features</a></li>
+                    <li><a href="#!" class="text-white">Pricing</a></li>
+                    <li><a href="#!" class="text-white">FAQs</a></li>
+                </ul>
+            </div>
+            
+            <!-- Contact Section -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-uppercase">Contact</h5>
+                <ul class="list-unstyled mb-0">
+                    <li><a href="mailto:info@myapp.com" class="text-white">info@myapp.com</a></li>
+                    <li><a href="#!" class="text-white">LinkedIn</a></li>
+                    <li><a href="#!" class="text-white">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2024 EIT | Designed for Face Detection
+    </div>
+</footer>
+<script>
+    document.addEventListener('input', function() {
+        // Get filter values
+        const idFilter = document.getElementById('filter-employee-id').value.toLowerCase();
+        const nameFilter = document.getElementById('filter-employee-name').value.toLowerCase();
+        const departmentFilter = document.getElementById('filter-department').value.toLowerCase();
+        const timeInFilter = document.getElementById('filter-time-in').value.toLowerCase();
+        const timeOutFilter = document.getElementById('filter-time-out').value.toLowerCase();
+
+        // Select all table rows
+        const tableRows = document.querySelectorAll('#attendance-table tr');
+
+        tableRows.forEach(row => {
+            const idText = row.cells[0].innerText.toLowerCase();
+            const nameText = row.cells[1].innerText.toLowerCase();
+            const departmentText = row.cells[2].innerText.toLowerCase();
+            const timeInText = row.cells[3].innerText.toLowerCase();
+            const timeOutText = row.cells[4].innerText.toLowerCase();
+
+            // Show/hide row based on matching criteria
+            row.style.display =
+                (idText.includes(idFilter) &&
+                nameText.includes(nameFilter) &&
+                departmentText.includes(departmentFilter) &&
+                (!timeInFilter || timeInText.startsWith(timeInFilter)) &&
+                (!timeOutFilter || timeOutText.startsWith(timeOutFilter))) ? '' : 'none';
+        });
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

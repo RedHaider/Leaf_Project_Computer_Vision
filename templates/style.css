@@ -1,0 +1,49 @@
+/* Background image */
+body {
+    background-image: url("{{ url_for('static', filename='images/background-image.jpg') }}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 100vh;
+    margin: 0;
+}
+
+#video-feed {
+    max-width: 60%;
+    border: 4px solid #007bff;
+    border-radius: 12px;
+    display: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    max-width: 800px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 20px;
+}
+
+.btn-custom {
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+}
+
+.container h1 {
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.btn-custom:hover {
+    background-color: #0056b3;
+}
+
+.footer {
+    margin-top: 30px;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
